@@ -1,0 +1,15 @@
+envvars:
+# these represent different types of branches as classified by
+# the gitWorkFlow variable set in each job, we can then set different
+# executions depending on that classification.
+# "other" is simply a catch all that dont match the specific branch type or your need
+## Enhanced configuration##
+# A basic shell command may be used to set a value instead of a literal
+# the format of the YAML value to execute the command is as follows
+#   1: literal 'sh' followed by the : delimiter
+#   2: the container you wish to run the command in followed by : delimiter
+#   3: the command you wish to run.
+# e.g. sh:mavenbuilder:echo 'help me please' (will run echo command on the container marked 'mavenbuilder')
+other:
+  vars:
+    BUILDER: "ci"

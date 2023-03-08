@@ -1,0 +1,39 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  labels:
+    jenkins: jenkins-pipeline
+spec:
+  securityContext:
+  runAsUser: 0
+  volumes:
+    - name: docker-sock
+      hostPath:
+        path: /var/run/docker.sock
+    - name: docker-binary
+      hostPath:
+        path: /usr/bin/docker
+      containers:
+        - name: jnlp
+          image: ${DOCKERHUBURL}/too1s/jnlp-slave-1bgcert:latest
+          ttyEnabled: true
+        - name: sonar-scanner-tools
+          image: ${DOCKERHUBURL}/pffc/tools/sonar-scanner-tools:latest
+          command:
+            - cat
+          ttyEnabled: true
+        - name: mavenbuilder
+          image: ${DOCKERHUBURL}/pffc/tools/java11/docker/bui1d/tools:release
+          imagePullPolicy: Always
+          ttyEnabled: true
+          securityContext:
+            privileged: true
+            capabilities:
+              add: [ "IPC OWNER" ]
+          command:
+            - cat
+          volumeMounts:
+            - mountPath: /wvar/run/docker.sock
+              name: docker-sock
+            - mountPath: /usr/bin/docker
+              name: docker-binary
